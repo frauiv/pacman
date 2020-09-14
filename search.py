@@ -85,21 +85,34 @@ def depthFirstSearch(problem):
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
+
     """
+    
     "*** YOUR CODE HERE ***"
-    from util import Stack
-    list = Stack()
-    list.push(problem.getStartState()) 
-    print list
+    discovered = []
+    list_of_actions = []
+    object = util.Stack()
+    object.push((problem.getStartState(), "Stop", 0))
 
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    return ['Stop', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'East', 'East', 'East', 'North', 'North', 'North', 'West', 'North', 'North', 'North', 'North', 'East']
+"""
+    # We will use stack and a list
+    while (not object.isEmpty()):
+        state = object.pop()
+        state_location = state[0]
+        
+        if problem.isGoalState(state_location):
+            return list_of_actions
+        
+        if state_location not in discovered:
+            discovered.append(state_location)
+            list_of_actions.append(state[1])
+            print list_of_actions
+            for successor in problem.getSuccessors(state_location):
+                object.push(successor)
+"""
 
-    #util.raiseNotDefined()
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    return  [ w, w, w, s, w,s,w,s,s,s,s,s]
+
     
 
 def breadthFirstSearch(problem):
