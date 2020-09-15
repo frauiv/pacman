@@ -155,6 +155,59 @@ def search_bfs(problem, object):
                     object.push([parent_list_index,successor])
     return []
 
+def search_ucs(problem, object):
+    discovered = []
+    object.push([-1,0,(problem.getStartState(), "Stop", 0)],2)
+    possible_states = []
+    list_of_actions =[]
+    
+    # We will use queue and a list
+    while (not object.isEmpty()):
+        state = object.pop()
+        #get the current state location, parent location in list, and total running cost
+        state_location = state[2][0]
+        parent_list_index = state[0]
+        #current_cost = state[0][1][2]+state[1]
+        #print state
+
+        if problem.isGoalState(state_location):
+            # print list_of_actions
+            # just the action
+            possible_states.append((parent_list_index, state[2][1][1]))
+            
+            list_of_actions.append(state[2][1])
+            while(parent_list_index != 0):
+                state_to_add = possible_states[parent_list_index]
+                list_of_actions.append(state_to_add[1])
+                parent_list_index = state_to_add[0]
+            list_of_actions.reverse()
+
+            return list_of_actions
+
+        #only will add successors and append to list if current location not discovered 
+        if state_location not in discovered:
+            #add current satate to discovered list
+            discovered.append(state_location)
+            
+            #append parents location in possible state list 
+            #along with the action state and state location on board 
+            possible_states.append((parent_list_index, state[2][1], state[1]))
+
+            #get location of parent in the possible states list 
+            parent_list_index = len(possible_states)-1
+
+            #get successors and add them to queue 
+            for successor in problem.getSuccessors(state_location):
+                if successor[0] not in discovered:
+                    #only append parent location in possible states and the successor 
+                    object.push([parent_list_index, state[1]+successor[2],successor],state[1]+successor[2])
+                else:
+                    #if the successor is discovered, check if it needs to be updated
+                    new_path_cost = state[1]+successor[2]
+                    object.update2(state, new_path_cost,successor)
+                    
+    return []
+
 def depthFirstSearch(problem):
     # Initialize an empty Stack
     object = util.Stack()
@@ -165,12 +218,15 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    object = util.Queue()
+    return search_bfs(problem, object)
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    object = util.PriorityQueue()
+    # DFS is general graph search with a Stack as the data structure
+    return search_ucs(problem, object)
 
 def nullHeuristic(state, problem=None):
     """
