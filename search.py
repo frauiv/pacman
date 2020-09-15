@@ -72,47 +72,50 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-
-    """
-    
-    "*** YOUR CODE HERE ***"
+def search_dfs(problem, object):
     discovered = []
+    object.push([0,(problem.getStartState(), 'Stop', 0)])
+    possible_states = []
     list_of_actions = []
-    object = util.Stack()
-    object.push((problem.getStartState(), "Stop", 0))
-
-    return ['Stop', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'South', 'East', 'East', 'East', 'North', 'North', 'North', 'West', 'North', 'North', 'North', 'North', 'East']
-"""
-    # We will use stack and a list
+    # We will use queue and a list
     while (not object.isEmpty()):
         state = object.pop()
-        state_location = state[0]
+    
+        state_location = state[1][0]
         
+        moveNum = state[0]
         if problem.isGoalState(state_location):
+            # print list_of_actions
+            # just the actions
+            possible_states.append((moveNum, state[1][1]))
+            for x in possible_states:
+                if(x[1] != 'Stop'):
+                    list_of_actions.append(x[1])
             return list_of_actions
+        
         
         if state_location not in discovered:
             discovered.append(state_location)
-            list_of_actions.append(state[1])
-            print list_of_actions
+
+            #only do this move after start state has been popped 
+            if state[1][1] != 'Stop':
+               # print moveNum
+                if moveNum <= possible_states[-1][0]:
+                #want copy from start of list to predessor 
+                    possible_states = possible_states[0:moveNum]
+
+            #only append move number and action 
+            possible_states.append((moveNum, state[1][1]))
             for successor in problem.getSuccessors(state_location):
-                object.push(successor)
-"""
+                if successor[0] not in discovered:
+                    object.push([moveNum+1, successor])
+    return []
 
-
+def depthFirstSearch(problem):
+    # Initialize an empty Stack
+    object = util.Stack()
+    # DFS is general graph search with a Stack as the data structure
+    return search_dfs(problem, object)
     
 
 def breadthFirstSearch(problem):
