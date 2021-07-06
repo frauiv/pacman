@@ -3,6 +3,8 @@ Project 1 for 411
 Jazbel Lopez
 Ivana Pavlovic
 
+http://ai.berkeley.edu/search.html
+
 To get our UCS to work with how we implement the search and the data we stored we created an updated version of update() from the priority queue class. Our function started at 209 of útil.py. We called it update2() we have included útil.py in our zipped file but I will also add the function below to for quicker access. 
 
 
